@@ -6,6 +6,7 @@ PSEDIT_SHORT=false
 PSEDIT_HIDE=false
 PSEDIT_BRANCH=false
 PSEDIT_COMMIT=false
+PSEDIT_SCREEN=false
 PSEDIT_COLOR="${NC}"
 
 alias "psedit-p"="PSEDIT_SHORT=true ; PSEDIT_HIDE=false"
@@ -17,6 +18,8 @@ alias "psedit+b"="PSEDIT_BRANCH=true"
 alias "psedit-b"="PSEDIT_BRANCH=false"
 alias "psedit+c"="PSEDIT_COMMIT=true"
 alias "psedit-c"="PSEDIT_COMMIT=false"
+alias "psedit+s"="PSEDIT_SCREEN=true"
+alias "psedit-s"="PSEDIT_SCREEN=false"
 alias "psedit++"="PSEDIT_EXITCODE=true ; PSEDIT_SHORT=false ; PSEDIT_HIDE=false ; PSEDIT_BRANCH=true ; PSEDIT_COMMIT=true"
 alias "psedit--"="PSEDIT_EXITCODE=false ; PSEDIT_SHORT=false ; PSEDIT_HIDE=false ; PSEDIT_BRANCH=false ; PSEDIT_COMMIT=false"
 
@@ -53,10 +56,12 @@ function prompt() {
 
 
     ##  session  ##
-    if [ "${STY}" == "" ]; then
-        lsession=""
-    else
-        lsession="[${CYAN}${STY}${NC}]"
+    if [ $PSEDIT_SCREEN == true ]; then
+	if [ "${STY}" == "" ]; then
+	    lsession=""
+	else
+	    lsession="[${CYAN}${STY}${NC}]"
+	fi
     fi
 
 
