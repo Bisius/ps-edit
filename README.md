@@ -14,3 +14,5 @@ Run **sudo ./install.sh** to install
 * **`psedit+p`**: Will enable printing full path
 * **`psedit-p`**: Will enable printing only the dir name
 * **`psedit--p`**: Will disable printing the path
+* **`psedit+s`**: Will enable printing the screen session
+* **`psedit-s`**: Will disable printing the screen session
