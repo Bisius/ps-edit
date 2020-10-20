@@ -6,6 +6,7 @@ PSEDIT_SHORT=false
 PSEDIT_HIDE=false
 PSEDIT_BRANCH=true
 PSEDIT_COMMIT=true
+PSEDIT_GITSTAT=true
 PSEDIT_SCREEN=true
 PSEDIT_COLOR="${NC}"
 
@@ -18,10 +19,12 @@ alias "psedit+b"="PSEDIT_BRANCH=true"
 alias "psedit-b"="PSEDIT_BRANCH=false"
 alias "psedit+c"="PSEDIT_COMMIT=true"
 alias "psedit-c"="PSEDIT_COMMIT=false"
+alias "psedit+gs"="PSEDIT_GITSTAT=true"
+alias "psedit-gs"="PSEDIT_GITSTAT=false"
 alias "psedit+s"="PSEDIT_SCREEN=true"
 alias "psedit-s"="PSEDIT_SCREEN=false"
-alias "psedit++"="PSEDIT_EXITCODE=true ; PSEDIT_SHORT=false ; PSEDIT_HIDE=false ; PSEDIT_BRANCH=true ; PSEDIT_COMMIT=true"
-alias "psedit--"="PSEDIT_EXITCODE=false ; PSEDIT_SHORT=false ; PSEDIT_HIDE=false ; PSEDIT_BRANCH=false ; PSEDIT_COMMIT=false"
+alias "psedit++"="PSEDIT_EXITCODE=true ; PSEDIT_SHORT=false ; PSEDIT_HIDE=false ; PSEDIT_BRANCH=true ; PSEDIT_COMMIT=true ; PSEDIT_GITSTAT=true ; PSEDIT_SCREEN=true"
+alias "psedit--"="PSEDIT_EXITCODE=false ; PSEDIT_SHORT=false ; PSEDIT_HIDE=false ; PSEDIT_BRANCH=false ; PSEDIT_COMMIT=false ; PSEDIT_GITSTAT=false ; PSEDIT_SCREEN=false"
 
 function prompt() {
     local code="$?"
@@ -80,6 +83,12 @@ function prompt() {
     ##  git  ##
 	local lbranch=`git rev-parse --abbrev-ref HEAD 2> /dev/null`
 	local lcommit=`git log --pretty=format:'%h' -n 1 2> /dev/null`
+	git status | grep "nothing to commit" > /dev/null 2> /dev/null
+	ecode=$?
+	local lgitstat=""
+	if [ "${ecode}" != "0" ]; then
+		lgitstat="${PURPLE}*${NC}"
+	fi
 
 	if [ $PSEDIT_BRANCH == true ]; then
 		if [ "${lbranch}" != "" ]; then
@@ -94,6 +103,14 @@ function prompt() {
 			else
 				lgit="${lgit}-${PURPLE}${lcommit}${NC}"
 			fi
+		fi
+	fi
+
+	if [ $PSEDIT_GITSTAT == true ]; then
+		if [ "${lgit}" == "" ]; then
+			lgit="[${lgitstat}"
+		else
+			lgit="${lgit}${lgitstat}"
 		fi
 	fi
 

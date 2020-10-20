@@ -16,3 +16,5 @@ Run **sudo ./install.sh** to install
 * **`psedit--p`**: Will disable printing the path
 * **`psedit+s`**: Will enable printing the screen session
 * **`psedit-s`**: Will disable printing the screen session
+* **`psedit+gs`**: Will enable printing git status
+* **`psedit-gs`**: Will disable printing git status
