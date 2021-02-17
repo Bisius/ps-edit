@@ -2,7 +2,6 @@
 
 
 PSEDIT_EXITCODE=false
-
 PSEDIT_SHORT=false
 PSEDIT_HIDE=false
 PSEDIT_BRANCH=true
@@ -61,11 +60,11 @@ function prompt() {
 
     ##  session  ##
     if [ $PSEDIT_SCREEN == true ]; then
-	if [ "${STY}" == "" ]; then
-	    lsession=""
-	else
-	    lsession="[${CYAN}${STY}${NC}]"
-	fi
+    if [ "${STY}" == "" ]; then
+        lsession=""
+    else
+        lsession="[${CYAN}${STY}${NC}]"
+    fi
     fi
 
 
@@ -82,48 +81,42 @@ function prompt() {
 
 
     ##  git  ##
-	local lbranch=`git rev-parse --abbrev-ref HEAD 2> /dev/null`
-	local lcommit=`git log --pretty=format:'%h' -n 1 2> /dev/null`
-	git status 2> /dev/null | grep "nothing to commit" > /dev/null 2> /dev/null
-	ecode=$?
-	git status 2>&1 | grep "fatal" > /dev/null 2> /dev/null
-	ecode2=$?
-	local lgitstat=""
-	if [ "${ecode}" != "0" ]; then
-		if [ "${ecode2}" != "0" ]; then
-			lgitstat="${PURPLE}*${NC}"
-		fi
-	fi
+    local lbranch=`git rev-parse --abbrev-ref HEAD 2> /dev/null`
+    local lcommit=`git log --pretty=format:'%h' -n 1 2> /dev/null`
+    git status | grep "nothing to commit" > /dev/null 2> /dev/null
+    ecode=$?
+    local lgitstat=""
+    if [ "${ecode}" != "0" ]; then
+        lgitstat="${PURPLE}*${NC}"
+    fi
 
-	if [ $PSEDIT_BRANCH == true ]; then
-		if [ "${lbranch}" != "" ]; then
-			lgit="[${PURPLE}${lbranch}${NC}"
-		fi
-	fi
+    if [ $PSEDIT_BRANCH == true ]; then
+        if [ "${lbranch}" != "" ]; then
+            lgit="[${PURPLE}${lbranch}${NC}"
+        fi
+    fi
 
-	if [ $PSEDIT_COMMIT == true ]; then
-		if [ "${lcommit}" != "" ]; then
-			if [ "${lgit}" == "" ]; then
-				lgit="[${PURPLE}${lcommit}${NC}"
-			else
-				lgit="${lgit}-${PURPLE}${lcommit}${NC}"
-			fi
-		fi
-	fi
+    if [ $PSEDIT_COMMIT == true ]; then
+        if [ "${lcommit}" != "" ]; then
+            if [ "${lgit}" == "" ]; then
+                lgit="[${PURPLE}${lcommit}${NC}"
+            else
+                lgit="${lgit}-${PURPLE}${lcommit}${NC}"
+            fi
+        fi
+    fi
 
-	if [ $PSEDIT_GITSTAT == true ]; then
-		if [ "${lgitstat}" != "" ]; then
-			if [ "${lgit}" == "" ]; then
-				lgit="[${lgitstat}"
-			else
-				lgit="${lgit}${lgitstat}"
-			fi
-		fi
-	fi
+    if [ $PSEDIT_GITSTAT == true ]; then
+        if [ "${lgit}" == "" ]; then
+            lgit="[${lgitstat}"
+        else
+            lgit="${lgit}${lgitstat}"
+        fi
+    fi
 
-	if [ "${lgit}" != "" ]; then
-		lgit="${lgit}]"
-	fi
+    if [ "${lgit}" != "" ]; then
+        lgit="${lgit}]"
+    fi
 
 
     ##  prompt  ""
