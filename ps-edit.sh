@@ -2,6 +2,7 @@
 
 
 PSEDIT_EXITCODE=false
+
 PSEDIT_SHORT=false
 PSEDIT_HIDE=false
 PSEDIT_BRANCH=true
@@ -83,11 +84,15 @@ function prompt() {
     ##  git  ##
 	local lbranch=`git rev-parse --abbrev-ref HEAD 2> /dev/null`
 	local lcommit=`git log --pretty=format:'%h' -n 1 2> /dev/null`
-	git status | grep "nothing to commit" > /dev/null 2> /dev/null
+	git status 2> /dev/null | grep "nothing to commit" > /dev/null 2> /dev/null
 	ecode=$?
+	git status 2>&1 | grep "fatal" > /dev/null 2> /dev/null
+	ecode2=$?
 	local lgitstat=""
 	if [ "${ecode}" != "0" ]; then
-		lgitstat="${PURPLE}*${NC}"
+		if [ "${ecode2}" != "0" ]; then
+			lgitstat="${PURPLE}*${NC}"
+		fi
 	fi
 
 	if [ $PSEDIT_BRANCH == true ]; then
@@ -107,10 +112,12 @@ function prompt() {
 	fi
 
 	if [ $PSEDIT_GITSTAT == true ]; then
-		if [ "${lgit}" == "" ]; then
-			lgit="[${lgitstat}"
-		else
-			lgit="${lgit}${lgitstat}"
+		if [ "${lgitstat}" != "" ]; then
+			if [ "${lgit}" == "" ]; then
+				lgit="[${lgitstat}"
+			else
+				lgit="${lgit}${lgitstat}"
+			fi
 		fi
 	fi
 
